@@ -1,5 +1,12 @@
 ## Sitemap-parser
-[![Build Status](https://travis-ci.org/seantomburke/sitemapper.svg?branch=master)](https://travis-ci.org/seantomburke/sitemapper) [![Monthly Downloads](https://img.shields.io/npm/dm/sitemapper.svg)](https://www.npmjs.com/package/sitemapper)
+[![license](https://img.shields.io/github/license/seantomburke/sitemapper.svg)](https://github.com/seantomburke/sitemapper/blob/main/LICENSE)
+[![release](https://img.shields.io/github/release/seantomburke/sitemapper.svg)](https://github.com/seantomburke/sitemapper/releases/latest)
+[![GitHub release date](https://img.shields.io/github/release-date/seantomburke/sitemapper.svg)](https://github.com/seantomburke/sitemapper/releases)
+![Test](https://github.com/seantomburke/sitemapper/workflows/NPM.js%20CI/badge.svg?branch=main&event=push)
+![Code Scanning](https://github.com/seantomburke/sitemapper/workflows/NPM.js%20CI/badge.svg?event=push)
+[![CodeFactor](https://www.codefactor.io/repository/github/seantomburke/sitemapper/badge)](https://www.codefactor.io/repository/github/seantomburke/sitemapper)
+[![Build Status](https://travis-ci.org/seantomburke/sitemapper.svg?branch=master)](https://travis-ci.org/seantomburke/sitemapper) 
+[![Monthly Downloads](https://img.shields.io/npm/dm/sitemapper.svg)](https://www.npmjs.com/package/sitemapper)
 [![npm version](https://badge.fury.io/js/sitemapper.svg)](https://badge.fury.io/js/sitemapper)
 [![dependencies Status](https://david-dm.org/seantomburke/sitemapper/status.svg)](https://david-dm.org/seantomburke/sitemapper)
 [![Inline docs](https://inch-ci.org/github/seantomburke/sitemapper.svg?branch=master&style=shields)](https://inch-ci.org/github/seantomburke/sitemapper)
