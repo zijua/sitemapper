@@ -7,13 +7,15 @@
  */
 
 import { parseStringPromise } from 'xml2js';
-import got, { Headers, OptionsOfTextResponseBody } from 'got';
+// @ts-ignore
+import got from 'got';
+// @ts-ignore
 import zlib from 'zlib';
+// @ts-ignore
 import Url from 'url';
+// @ts-ignore
 import path from 'path';
 import { SitemapperOptions, SitemapperResponse} from '../../sitemapper';
-import { ErrorCallback } from 'typescript';
-import { Response } from 'got';
 import { Buffer } from 'buffer';
 
 /**
@@ -38,7 +40,7 @@ export default class Sitemapper {
    *   timeout: 15000
    *  });
    */
-  constructor(options: SitemapperOptions) {
+  constructor(options?: SitemapperOptions) {
     const settings: SitemapperOptions = options || { requestHeaders: {}};
     this.url = settings.url;
     this.timeout = settings.timeout || 15000;
@@ -294,7 +296,7 @@ export default class Sitemapper {
    * @param {string} url - url to query
    * @returns {Boolean}
    */
-  isGzip(url) {
+  isGzip(url: string) {
     const parsed = Url.parse(url);
     const ext = path.extname(parsed.path);
     return ext === '.gz';
