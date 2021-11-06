@@ -7,15 +7,25 @@
  */
 
 import { parseStringPromise } from 'xml2js';
-import got from 'got';
+import got, { Headers, OptionsOfTextResponseBody } from 'got';
 import zlib from 'zlib';
 import Url from 'url';
 import path from 'path';
+import { SitemapperOptions, SitemapperResponse} from '../../sitemapper';
+import { ErrorCallback } from 'typescript';
+import { Response } from 'got';
+import { Buffer } from 'buffer';
 
 /**
  * @typedef {Object} Sitemapper
  */
 export default class Sitemapper {
+  public url: string;
+  public timeout: number;
+  public timeoutTable: Object;
+  public requestHeaders: any;
+  public debug: boolean;
+
   /**
    * Construct the Sitemapper class
    *
@@ -28,8 +38,8 @@ export default class Sitemapper {
    *   timeout: 15000
    *  });
    */
-  constructor(options) {
-    const settings = options || { 'requestHeaders': {} };
+  constructor(options: SitemapperOptions) {
+    const settings: SitemapperOptions = options || { requestHeaders: {}};
     this.url = settings.url;
     this.timeout = settings.timeout || 15000;
     this.timeoutTable = {};
@@ -46,12 +56,12 @@ export default class Sitemapper {
    * @example sitemapper.fetch('example.xml')
    *  .then((sites) => console.log(sites));
    */
-  async fetch(url = this.url) {
-    let sites = [];
+  async fetch(url: string = this.url) {
+    let sites: Array<string> = [];
     try {
       // crawl the URL
       sites = await this.crawl(url);
-    } catch (e) {
+    } catch (e: any) {
       if (this.debug) {
         console.error(e);
       }
@@ -81,7 +91,7 @@ export default class Sitemapper {
    * @param {Timeout} duration
    * @example sitemapper.timeout = 15000; // 15 seconds
    */
-  static set timeout(duration) {
+  static set timeout(duration: Number) {
     this.timeout = duration;
   }
 
@@ -90,7 +100,7 @@ export default class Sitemapper {
    * @param {string} url - url for making requests. Should be a link to a sitemaps.xml
    * @example sitemapper.url = 'https://wp.seantburke.com/sitemap.xml'
    */
-  static set url(url) {
+  static set url(url: string) {
     this.url = url;
   }
 
@@ -99,7 +109,7 @@ export default class Sitemapper {
    * @returns {string}
    * @example console.log(sitemapper.url)
    */
-  static get url() {
+  static get url(): string {
     return this.url;
   }
 
@@ -108,7 +118,7 @@ export default class Sitemapper {
    * @param {Boolean} option - set whether to show debug logs in output.
    * @example sitemapper.debug = true;
    */
-  static set debug(option) {
+  static set debug(option: boolean) {
     this.debug = option;
   }
 
@@ -117,20 +127,20 @@ export default class Sitemapper {
    * @returns {Boolean}
    * @example console.log(sitemapper.debug)
    */
-  static get debug() {
+  static get debug(): boolean {
     return this.debug;
   }
 
   /**
-   * Requests the URL and uses parseStringPromise to parse through and find the data
+   * Requests the URL and uses parsestringPromise to parse through and find the data
    *
    * @private
    * @param {string} [url] - the Sitemaps url (e.g https://wp.seantburke.com/sitemap.xml)
    * @returns {Promise<ParseData>}
    */
-  async parse(url = this.url) {
+  async parse(url: string = this.url): Promise<{error, data}> {
     // setup the response options for the got request
-    const requestOptions = {
+    const requestOptions: any = {
       method: 'GET',
       resolveWithFullResponse: true,
       gzip: true,
@@ -146,7 +156,7 @@ export default class Sitemapper {
       this.initializeTimeout(url, requester);
 
       // get the response from the requester promise
-      const response = await requester;
+      const response: any = await requester;
 
       // if the response does not have a successful status code then clear the timeout for this url.
       if (!response || response.statusCode !== 200) {
@@ -154,7 +164,7 @@ export default class Sitemapper {
         return { error: response.error, data: response };
       }
 
-      let responseBody;
+      let responseBody: Buffer;
 
       if (this.isGzip(url)) {
         responseBody = await this.decompressResponseBody(response.body);
@@ -192,7 +202,7 @@ export default class Sitemapper {
    * @param {string} url - url to use as a hash in the timeoutTable
    * @param {Promise} requester - the promise that creates the web request to the url
    */
-  initializeTimeout(url, requester) {
+  initializeTimeout(url: string, requester: { cancel: Function }) {
     // this will throw a CancelError which will be handled in the parent that calls this method.
     this.timeoutTable[url] = setTimeout(() => requester.cancel(), this.timeout);
   }
@@ -205,9 +215,9 @@ export default class Sitemapper {
    * @param {string} url - the Sitemaps url (e.g https://wp.seantburke.com/sitemap.xml)
    * @returns {Promise<SitesArray> | Promise<ParseData>}
    */
-  async crawl(url) {
+  async crawl(url: string): Promise<Array<string>> {
     try {
-      const { error, data } = await this.parse(url);
+      const { error, data}: {error: Error, data: {sitemapindex: { sitemap: Array<{loc: string[] }>}, urlset: { url: Array<{ loc: string[] }>}, } } = await this.parse(url);
       // The promise resolved, remove the timeout
       clearTimeout(this.timeoutTable[url]);
 
@@ -228,14 +238,14 @@ export default class Sitemapper {
           console.debug(`Additional sitemap found during "crawl('${url}')"`);
         }
         // Map each child url into a promise to create an array of promises
-        const sitemap = data.sitemapindex.sitemap.map(map => map.loc && map.loc[0]);
-        const promiseArray = sitemap.map(site => this.crawl(site));
+        const sitemap: Array<string> = data.sitemapindex.sitemap.map(map => map.loc && map.loc[0]);
+        const promiseArray: Array<Promise<string[]>> = sitemap.map((site: string) => this.crawl(site));
 
         // Make sure all the promises resolve then filter and reduce the array
-        const results = await Promise.all(promiseArray);
-        const sites = results
-          .filter(result => !result.error)
-          .reduce((prev, curr) => prev.concat(curr), []);
+        const results: Array<string[]> = await Promise.all(promiseArray);
+        const sites: Array<string> = results
+          .filter((result: any) => !result.error)
+          .reduce((prev: Array<string>, curr: Array<string>) => prev.concat(curr), []);
 
         return sites;
       }
@@ -296,7 +306,7 @@ export default class Sitemapper {
    * @param {Buffer} body - body of the gzipped file
    * @returns {Boolean}
    */
-  decompressResponseBody(body) {
+  decompressResponseBody(body: Buffer): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       const buffer = Buffer.from(body);
       zlib.gunzip(buffer, (err, result) => {
@@ -332,7 +342,7 @@ export default class Sitemapper {
  *
  * @typedef {Object} ParseData
  *
- * @property {Error} error that either comes from `parseStringPromise` or `got` or custom error
+ * @property {Error} error that either comes from `parsestringPromise` or `got` or custom error
  * @property {Object} data
  * @property {string} data.url - URL of sitemap
  * @property {Array} data.urlset - Array of returned URLs
@@ -371,7 +381,7 @@ export default class Sitemapper {
 /**
  * An array of urls
  *
- * @typedef {String[]} SitesArray
+ * @typedef {string[]} SitesArray
  * @example [
  *   'https://www.google.com',
  *   'https://www.linkedin.com'
