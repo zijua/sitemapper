@@ -32,7 +32,7 @@ sitemap.fetch('https://wp.seantburke.com/sitemap.xml').then(function(sites) {
 ```
 ### Examples in ES6
 ```javascript
-import Sitemapper from 'sitemapper';
+import Sitemapper from 'sitemapper_mos';
 
 (async () => {
   const Google = new Sitemapper({
