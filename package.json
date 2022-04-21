@@ -11,10 +11,10 @@
     "crawlers",
     "webcrawler"
   ],
-  "homepage": "http://github.com/seantomburke/sitemapper",
+  "homepage": "http://github.com/zijua/sitemapper",
   "tonicExampleFilename": "example.js",
   "bugs": {
-    "url": "http://github.com/seantomburke/sitemapper/issues"
+    "url": "http://github.com/zijua/sitemapper/issues"
   },
   "license": "MIT",
   "files": [
@@ -25,12 +25,12 @@
   "types": "./sitemapper.d.ts",
   "repository": {
     "type": "git",
-    "url": "git://github.com/seantomburke/sitemapper.git"
+    "url": "git://github.com/zijua/sitemapper.git"
   },
   "author": {
-    "name": "Sean Thomas Burke",
-    "email": "seantomburke@users.noreply.github.com",
-    "url": "http://www.seantburke.com"
+    "name": "Giovanni Manuel Toppi",
+    "email": "zijua@users.noreply.github.com",
+    "url": "https://www.gmtoppi.com"
   },
   "scripts": {
     "compile": "babel src -d lib -s && tsc --project ./src/tests/",
@@ -43,7 +43,12 @@
   },
   "maintainers": [
     {
-      "name": "Sean Thomas Burke",
+      "name": "Giovanni Manuel Toppi",
+      "email": "zijua@users.noreply.github.com",
+      "url": "https://www.gmtoppi.com"
+    },
+    {
+      "name": "Sean Thomas Burke (original author)",
       "email": "seantomburke@users.noreply.github.com",
       "url": "http://www.seantburke.com"
     }
