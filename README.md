@@ -16,7 +16,7 @@ Parse through a sitemaps xml to get all the urls for your crawler.
 
 ### Installation
 ```bash
-npm install sitemapper --save
+npm install sitemapper_mos --save
 ```
 
 ### Simple Example
