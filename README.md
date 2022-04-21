@@ -21,7 +21,7 @@ npm install sitemapper --save
 
 ### Simple Example
 ```javascript
-const Sitemapper = require('sitemapper');
+const Sitemapper = require('sitemapper_mos');
 
 const sitemap = new Sitemapper();
 
