@@ -10,7 +10,9 @@ let sitemapper;
 describe('Sitemapper', function () {
 
   beforeEach(() => {
-    sitemapper = new Sitemapper();
+    sitemapper = new Sitemapper({
+      rejectUnauthorized: false
+    });
   });
 
   describe('Sitemapper Class', function () {
@@ -57,9 +59,9 @@ describe('Sitemapper', function () {
   });
 
   describe('fetch Method resolves sites to array', function () {
-    it('https://wp.seantburke.com/sitemap.xml sitemaps should be an array', function (done) {
+    it('https://www.wegirls.it/page-sitemap.xml sitemaps should be an array', function (done) {
       this.timeout(30000);
-      const url = 'https://wp.seantburke.com/sitemap.xml';
+      const url = 'https://www.wegirls.it/page-sitemap.xml';
       sitemapper.fetch(url)
         .then(data => {
           data.sites.should.be.Array;
