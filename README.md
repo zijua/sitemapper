@@ -12,6 +12,9 @@
 ![Test](https://github.com/seantomburke/sitemapper/workflows/test/badge.svg?branch=master&event=push)
 
 Parse through a sitemaps xml to get all the urls for your crawler.
+
+This repository is useful if you will need to manage the property rejectUnauthorized that is broken on the original project.
+
 ## Version 2
 
 ### Installation
